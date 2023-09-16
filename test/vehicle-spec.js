@@ -158,6 +158,10 @@ describe ('Updating Data and Handling Errors', function () {
         let vehicle = new Vehicle("Toyota Prius", 2005, 23000);
 
         expect(vehicle.update.bind(vehicle, "Toyota Prius", 2007, 0)).to.throw(Error, "Price must be greater than 0");
+        // We need to bind the context to vehicle.update
+        // If we don't use bind, the context would be the caller, which is "expect"
+        // Or we can use fat arrow function to bind the context:
+        // expect(() => vehicle.update("Toyota Prius", 2007, 0)).to.throw(Error, "Price must be greater than 0");
         expect(vehicle.price).to.equal(23000);
     });
 });
@@ -297,7 +301,6 @@ describe ('Class Interactions - Submitting a Review', function () {
         expect(tester.eBikeTester).to.be.oneOf([undefined, false]);
 
         let validBicycle = new Bicycle("Trek 520", 2023, 1829);
-
         tester.submitReview(validBicycle, 5, "Great for touring and gravel");
         expect(tester.bikeTester).to.be.true;
         expect(tester.eBikeTester).to.be.oneOf([undefined, false]);
